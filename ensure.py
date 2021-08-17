@@ -31,6 +31,7 @@ def show_outputs(command, returncode, stdout):
     logging.info('Return code: %s' % returncode)
     logging.info('Output: %s' % stdout)
     logging.info('------------------')
+    return 0
 
 
 def run_services(commands):
