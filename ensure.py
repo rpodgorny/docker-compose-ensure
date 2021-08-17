@@ -17,32 +17,28 @@ import time
 import subprocess
 
 
-def cd_up():
-    return subprocess.run('cd ..', shell=True)
+def init_commands(dirname, services):
+    ret = []
+    for service in services:
+        command = f'cd {dirname} && ./service{service}/run'
+        ret.append(command)
+    return ret
 
 
-def gen_command(dirname, service_number):
-    pass  # TODO
+def show_outputs(command, returncode, stdout):
+    print('Command executed: ', command)
+    print('Return code: ', returncode)
+    print('Output: ', stdout)
+    print('------------------')
 
 
-def run_services(dirname):
-    command = f'cd {dirname}'
-    subprocess.run(command, capture_output=True, shell=True)
-    first = subprocess.run('cd active && ./service1/run', capture_output=True, shell=True)
-    print('first:: ', first)
-    print('first ret:: ', first.returncode)
-    print('first stdout:: ', first.stdout.decode())
-    second = subprocess.run('cd active && ./service2/run', capture_output=True, shell=True) # TODO make a loop (map?)
-    print('sec:: ', second)
-    print('sec ret:: ', second.returncode)
-    print('sec stdout:: ', second.stdout.decode())
-    third = subprocess.run('cd active && ./service3/run', capture_output=True, shell=True)
-    print('sec:: ', third)
-    print('sec ret:: ', third.returncode)
-    print('sec stdout:: ', third.stdout.decode())
-    print('done')
-    if first.returncode + second.returncode + third.returncode != 0:  # TODO look which one failed and print it
-        return 1
+def run_services(dirname, commands):
+    for command in commands:
+        process = subprocess.run(command, capture_output=True, shell=True)
+        show_outputs(command, process.returncode, process.stdout.decode())
+        if process.returncode != 0:
+            print('Failed to execute: ', command, '\n return code: ', process.returncode)
+            return 1
 
 
 def main():
@@ -56,11 +52,13 @@ def main():
     print(output)
     if not return_code:
         print('There is no return code. Everything went well.')
+    services = [1, 2, 3]
+    commands = init_commands(dirname, services)
 
     while 1:
-        error_check = run_services(dirname)
+        error_check = run_services(dirname, commands)
         if error_check:
-            print('Something failed. Exiting.')
+            print('Service is down. Exiting.')
             break
         time.sleep(10)
 
