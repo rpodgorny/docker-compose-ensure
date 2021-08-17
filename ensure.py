@@ -44,14 +44,6 @@ def run_services(commands):
 def main():
     args = docopt.docopt(__doc__)
     dirname = args['<dirname>']
-    print(dirname)
-    command = f'ls -l {dirname}'
-    output = subprocess.run(command, capture_output=True, shell=True)
-    return_code = output.returncode
-    print('command: ', command)
-    print(output)
-    if not return_code:
-        print('There is no return code. Everything went well.')
     services = [1, 2, 3]
     commands = init_commands(dirname, services)
 
