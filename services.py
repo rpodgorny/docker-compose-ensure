@@ -4,7 +4,7 @@
 atxupdater.
 
 Usage:
-  ensure.py <dirname>
+  services.py <dirname>
 
 Arguments:
   <dirname>  Name of the directory with services.
@@ -38,6 +38,9 @@ def run_services(commands):
             logging.info('Failed to execute: %s' % command)
             logging.info('Return code: %s' % process.returncode)
             return 1
+    # failed_services = list(filter(lambda z: z != 0, list(map(lambda y: show_outputs(y, y.returncode, y.stdout.decode()), list(map(lambda x: subprocess.run(x, capture_output=True, shell=True), commands))))))
+    # if failed_services:
+    #     logging.info('%s failed.' % failed_services[0])
 
 
 def main():
@@ -47,7 +50,6 @@ def main():
     dirname = args['<dirname>']
     services = [1, 2, 3]
     commands = init_commands(dirname, services)
-
     while 1:
         error_check = run_services(commands)
         if error_check:
