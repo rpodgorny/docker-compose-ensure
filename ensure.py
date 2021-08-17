@@ -19,10 +19,7 @@ import logging
 
 
 def init_commands(dirname, services):
-    ret = []
-    for service in services:
-        command = f'cd {dirname} && ./service{service}/run'
-        ret.append(command)
+    ret = list(map(lambda x: f'cd {dirname} && ./service{x}/run', services))
     return ret
 
 
