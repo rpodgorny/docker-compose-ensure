@@ -32,7 +32,7 @@ def show_outputs(command, returncode, stdout):
     print('------------------')
 
 
-def run_services(dirname, commands):
+def run_services(commands):
     for command in commands:
         process = subprocess.run(command, capture_output=True, shell=True)
         show_outputs(command, process.returncode, process.stdout.decode())
@@ -56,7 +56,7 @@ def main():
     commands = init_commands(dirname, services)
 
     while 1:
-        error_check = run_services(dirname, commands)
+        error_check = run_services(commands)
         if error_check:
             print('Service is down. Exiting.')
             break
