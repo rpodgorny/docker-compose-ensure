@@ -15,6 +15,7 @@ import docopt
 import sys
 import time
 import subprocess
+import logging
 
 
 def init_commands(dirname, services):
@@ -26,10 +27,10 @@ def init_commands(dirname, services):
 
 
 def show_outputs(command, returncode, stdout):
-    print('Command executed: ', command)
-    print('Return code: ', returncode)
-    print('Output: ', stdout)
-    print('------------------')
+    logging.info('Command executed: %s' % command)
+    logging.info('Return code: %s' % returncode)
+    logging.info('Output: %s' % stdout)
+    logging.info('------------------')
 
 
 def run_services(commands):
@@ -37,12 +38,15 @@ def run_services(commands):
         process = subprocess.run(command, capture_output=True, shell=True)
         show_outputs(command, process.returncode, process.stdout.decode())
         if process.returncode != 0:
-            print('Failed to execute: ', command, '\n return code: ', process.returncode)
+            logging.info('Failed to execute: %s' % command)
+            logging.info('Return code: %s' % process.returncode)
             return 1
 
 
 def main():
     args = docopt.docopt(__doc__)
+    logging.basicConfig(level='DEBUG', filename='services.log')
+    logging.getLogger().addHandler(logging.StreamHandler()) # print logging messages to console
     dirname = args['<dirname>']
     services = [1, 2, 3]
     commands = init_commands(dirname, services)
@@ -50,7 +54,7 @@ def main():
     while 1:
         error_check = run_services(commands)
         if error_check:
-            print('Service is down. Exiting.')
+            logging.info('Service is down. Exiting.')
             break
         time.sleep(10)
 
