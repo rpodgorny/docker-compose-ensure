@@ -1,13 +1,14 @@
 #!/usr/bin/python3
 
 '''
-atxupdater.
+Docker Services
 
 Usage:
-  services.py <dirname>
+  services.py <dirname> <command>...
 
 Arguments:
   <dirname>  Name of the directory with services.
+  <command>  Command that will be executed.
 '''
 
 
@@ -19,40 +20,31 @@ import logging
 import os
 
 
-def init_commands(dirname):
-    # return list(map(lambda x: f'cd {dirname} && ./service{x}/run', services))
+def init_directories(dirname):
     symlinks = os.listdir(path=f'./{dirname}')
     ret = []
     for symlink in symlinks:
-        fn = os.listdir(path=f'./{dirname}/{symlink}')
-        command = f'./{fn[0]}'
-        d = {
-            'path': f'./{dirname}/{symlink}',
-            'run_filename': command
-        }
-        ret.append(d)
+        dir = f'./{dirname}/{symlink}'
+        ret.append(dir)
     return ret
 
 
-def show_outputs(command, returncode, stdout):
-    logging.info('Command executed: %s' % command)
-    logging.info('Return code: %s' % returncode)
-    logging.info('Output: %s' % stdout)
+def show_outputs(process):
+    logging.info('Process info: %s' % process)
+    logging.info('Return code: %s' % process.returncode)
+    logging.info('Output: %s' % process.stdout.decode())
     logging.info('------------------')
     return 0
 
 
-def run_services(commands):
-    for command in commands:
-        process = subprocess.run(command['run_filename'], capture_output=True, shell=True, cwd=command['path'])
-        show_outputs(process, process.returncode, process.stdout.decode())
+def run_services(dirs, command):
+    for dir in dirs:
+        process = subprocess.run(command, capture_output=True, shell=True, cwd=dir)
+        show_outputs(process)
         if process.returncode != 0:
-            logging.info('Failed to execute: %s' % command)
+            logging.info('Failed to execute: %s' % command['run_filename'])
             logging.info('Return code: %s' % process.returncode)
             return 1
-    # failed_services = list(filter(lambda z: z != 0, map(lambda y: show_outputs(y, y.returncode, y.stdout.decode()), map(lambda x: subprocess.run(x, capture_output=True, shell=True), commands))))
-    # if failed_services:
-    #     logging.info('%s failed.' % failed_services[0])
 
 
 def main():
@@ -60,9 +52,10 @@ def main():
     logging.basicConfig(level='DEBUG', filename='services.log')
     logging.getLogger().addHandler(logging.StreamHandler()) # print logging messages to console
     dirname = args['<dirname>']
-    commands = init_commands(dirname)
+    command = args['<command>']
+    dirs = init_directories(dirname)
     while 1:
-        error_check = run_services(commands)
+        error_check = run_services(dirs, command[0])
         if error_check:
             logging.info('Service is down. Exiting.')
             break
