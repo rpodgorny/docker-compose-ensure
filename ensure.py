@@ -19,8 +19,7 @@ import logging
 
 
 def init_commands(dirname, services):
-    ret = list(map(lambda x: f'cd {dirname} && ./service{x}/run', services))
-    return ret
+    return list(map(lambda x: f'cd {dirname} && ./service{x}/run', services))
 
 
 def show_outputs(command, returncode, stdout):
