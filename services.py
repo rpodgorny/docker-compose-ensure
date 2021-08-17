@@ -44,7 +44,6 @@ def run_services(dirs, command):
         if process.returncode != 0:
             logging.info('Failed to execute: %s' % command['run_filename'])
             logging.info('Return code: %s' % process.returncode)
-            return 1
 
 
 def main():
@@ -55,10 +54,7 @@ def main():
     command = args['<command>']
     dirs = init_directories(dirname)
     while 1:
-        error_check = run_services(dirs, command[0])
-        if error_check:
-            logging.info('Service is down. Exiting.')
-            break
+        run_services(dirs, command[0])
         time.sleep(10)
 
 
