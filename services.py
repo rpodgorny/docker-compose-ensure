@@ -4,7 +4,7 @@
 Docker Services
 
 Usage:
-  services.py <dirname> <command> [options]
+  services.py [options] <dirname> <command>...
 
 Arguments:
   <dirname>  Name of the directory with services.
@@ -24,8 +24,8 @@ import os
 
 
 def run_services(dirs, command):
-    for dir in dirs:
-        process = subprocess.run(command, capture_output=True, shell=True, cwd=dir)
+    for dir_ in dirs:
+        process = subprocess.run(command, capture_output=True, shell=True, cwd=dir_)
         logging.info('Command executed: %s', command)
         logging.info('Return code: %s', process.returncode)
 
@@ -34,10 +34,13 @@ def main():
     args = docopt.docopt(__doc__)
     logging.basicConfig(level='DEBUG')
     dirname = args['<dirname>']
-    command = args['<command>']
+    pure_command = args['<command>']
+    if '--' in pure_command:
+        pure_command.pop(0)
+    command = ' '.join(pure_command)
     sleep_time = args['--sleep']
     sleep_time = float(sleep_time) if sleep_time else 5
-    dirs = [f'./{dirname}/{x}' for x in [x for x in os.listdir(dirname) if os.path.islink('./' + dirname + '/' + x)]]
+    dirs = [f'./{dirname}/{x}' for x in os.listdir(dirname) if os.path.islink(f'./{dirname}/{x}')]
     while 1:
         run_services(dirs, command)
         time.sleep(sleep_time)
