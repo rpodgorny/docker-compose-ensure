@@ -42,7 +42,7 @@ def run_services(dirs, command):
         process = subprocess.run(command, capture_output=True, shell=True, cwd=dir)
         show_outputs(process)
         if process.returncode != 0:
-            logging.info('Failed to execute: %s' % command['run_filename'])
+            logging.info('Failed to execute: %s' % command)
             logging.info('Return code: %s' % process.returncode)
 
 
