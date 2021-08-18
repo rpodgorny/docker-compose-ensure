@@ -23,14 +23,13 @@ import os
 def run_services(dirs, command):
     for dir in dirs:
         process = subprocess.run(command, capture_output=True, shell=True, cwd=dir)
-        logging.info('Command executed: ', command)
-        logging.info('Return code: ', process.returncode)
+        logging.info('Command executed: %s', command)
+        logging.info('Return code: %s', process.returncode)
 
 
 def main():
     args = docopt.docopt(__doc__)
     logging.basicConfig(level='DEBUG')
-    logging.getLogger().addHandler(logging.StreamHandler()) # print logging messages to console
     dirname = args['<dirname>']
     command = args['<command>']
     dirs = [f'./{dirname}/{x}' for x in [x for x in os.listdir(dirname) if os.path.islink('./' + dirname + '/' + x)]]
