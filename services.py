@@ -4,7 +4,7 @@
 Docker Services
 
 Usage:
-  services.py <dirname> <command>...
+  services.py <dirname> <command>
 
 Arguments:
   <dirname>  Name of the directory with services.
@@ -52,7 +52,7 @@ def main():
     logging.basicConfig(level='DEBUG', filename='services.log')
     logging.getLogger().addHandler(logging.StreamHandler()) # print logging messages to console
     dirname = args['<dirname>']
-    command = args['<command>'][0]
+    command = args['<command>']
     dirs = init_directories(dirname)
     while 1:
         run_services(dirs, command)
