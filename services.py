@@ -20,15 +20,6 @@ import logging
 import os
 
 
-def init_directories(dirname):
-    symlinks = os.listdir(path=f'./{dirname}')
-    ret = []
-    for symlink in symlinks:
-        dir = f'./{dirname}/{symlink}'
-        ret.append(dir)
-    return ret
-
-
 def show_outputs(command, process):
     logging.info('Command executed: %s' % command)
     logging.info('Process info: %s' % process)
@@ -53,7 +44,7 @@ def main():
     logging.getLogger().addHandler(logging.StreamHandler()) # print logging messages to console
     dirname = args['<dirname>']
     command = args['<command>']
-    dirs = init_directories(dirname)
+    dirs = list(map(lambda x: f'./{dirname}/{x}', os.listdir(path=f'./{dirname}')))
     while 1:
         run_services(dirs, command)
         time.sleep(10)
