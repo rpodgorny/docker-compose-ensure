@@ -52,10 +52,10 @@ def main():
     logging.basicConfig(level='DEBUG', filename='services.log')
     logging.getLogger().addHandler(logging.StreamHandler()) # print logging messages to console
     dirname = args['<dirname>']
-    command = args['<command>']
+    command = args['<command>'][0]
     dirs = init_directories(dirname)
     while 1:
-        run_services(dirs, command[0])
+        run_services(dirs, command)
         time.sleep(10)
 
 
