@@ -40,7 +40,7 @@ def run_services(dirs, command):
 
 def main():
     args = docopt.docopt(__doc__)
-    logging.basicConfig(level='DEBUG', filename='services.log')
+    logging.basicConfig(level='DEBUG')
     logging.getLogger().addHandler(logging.StreamHandler()) # print logging messages to console
     dirname = args['<dirname>']
     command = args['<command>']
