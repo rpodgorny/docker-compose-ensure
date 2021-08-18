@@ -20,22 +20,11 @@ import logging
 import os
 
 
-def show_outputs(command, process):
-    logging.info('Command executed: %s' % command)
-    logging.info('Process info: %s' % process)
-    logging.info('Return code: %s' % process.returncode)
-    logging.info('Output: %s' % process.stdout.decode())
-    logging.info('------------------')
-    return 0
-
-
 def run_services(dirs, command):
     for dir in dirs:
         process = subprocess.run(command, capture_output=True, shell=True, cwd=dir)
-        show_outputs(command, process)
-        if process.returncode != 0:
-            logging.info('Failed to execute: %s' % command)
-            logging.info('Return code: %s' % process.returncode)
+        logging.info('Command executed: ', command)
+        logging.info('Return code: ', process.returncode)
 
 
 def main():
