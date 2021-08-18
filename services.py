@@ -44,7 +44,7 @@ def main():
     logging.getLogger().addHandler(logging.StreamHandler()) # print logging messages to console
     dirname = args['<dirname>']
     command = args['<command>']
-    dirs = list(map(lambda x: f'./{dirname}/{x}', os.listdir(path=f'./{dirname}')))
+    dirs = [f'./{dirname}/{x}' for x in [x for x in os.listdir(dirname) if os.path.islink('./' + dirname + '/' + x)]]
     while 1:
         run_services(dirs, command)
         time.sleep(10)
