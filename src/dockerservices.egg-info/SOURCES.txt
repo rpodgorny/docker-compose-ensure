@@ -1,0 +1,10 @@
+README.md
+setup.py
+src/dockerservices/__init__.py
+src/dockerservices/dockerservices.py
+src/dockerservices.egg-info/PKG-INFO
+src/dockerservices.egg-info/SOURCES.txt
+src/dockerservices.egg-info/dependency_links.txt
+src/dockerservices.egg-info/entry_points.txt
+src/dockerservices.egg-info/requires.txt
+src/dockerservices.egg-info/top_level.txt
