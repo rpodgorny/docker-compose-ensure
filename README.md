@@ -13,10 +13,12 @@ Install it.
 
     [Service]
     Type=simple
-    ExecStart=/usr/bin/dockerservices
+    ExecStart=/usr/bin/dockerservices --sleep 1 /home/commrat/Job/DockerComposeEnsure/active ./run
 
     [Install]
     WantedBy=multi-user.target
+
+Note: Have to find more optimal way to pass args!
 
 ## Service file
 ### Type
@@ -36,3 +38,4 @@ idle: This indicates that the service will not be run until all jobs are dispatc
 ## Useful links
 Great docs about systemd files: https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
 Intro to systemd: https://wiki.archlinux.org/title/Systemd
+Make it works: https://www.shubhamdipt.com/blog/how-to-create-a-systemd-service-in-linux/
