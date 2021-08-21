@@ -4,6 +4,20 @@
 cd to root project folder and apply this command:
     python3 setup.py --command-packages=stdeb.command bdist_deb
 
+That will creates directory 'deb_dist' where .deb file is located.
+Install it.
+
+## dockerservices.service
+    [Unit]
+    Description=System Logging Service
+
+    [Service]
+    Type=simple
+    ExecStart=/usr/bin/dockerservices
+
+    [Install]
+    WantedBy=multi-user.target
+
 ## Service file
 ### Type
 The Type= directive can be one of the following:
@@ -18,3 +32,7 @@ dbus: This indicates that unit will take a name on the D-Bus bus. When this happ
 notify: This indicates that the service will issue a notification when it has finished starting up. The systemd process will wait for this to happen before proceeding to other units.
 
 idle: This indicates that the service will not be run until all jobs are dispatched.
+
+## Useful links
+Great docs about systemd files: https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
+Intro to systemd: https://wiki.archlinux.org/title/Systemd
