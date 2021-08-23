@@ -12,7 +12,7 @@ Arguments:
 
 Options:
   --sleep <sleep>  Specify how often data will be send (secs).
-  --shell          shell=True
+  --shell <shell>  Shell active.
 '''
 
 
@@ -24,10 +24,10 @@ import logging
 import os
 
 
-def run_services(dirs, command):
+def run_services(dirs, command, shell_):
     for dir_ in dirs:
         logging.info('Command executed: %s', command)
-        process = subprocess.run(command, capture_output=True, shell=True, cwd=dir_)  # TODO capture output?
+        process = subprocess.run(command, capture_output=True, shell=shell_, cwd=dir_)  # TODO capture output?
         logging.info('Return code: %s', process.returncode)
 
 
@@ -38,12 +38,14 @@ def main():
     pure_command = args['<command>']
     if '--' in pure_command:
         pure_command.pop(0)
+    shell = args['--shell']
+    shell = True if shell else False
     command = ' '.join(pure_command)
     sleep_time = args['--sleep']
     sleep_time = float(sleep_time) if sleep_time else 5
     dirs = [f'./{dirname}/{x}' for x in os.listdir(dirname) if os.path.islink(f'./{dirname}/{x}')]
     while 1:
-        run_services(dirs, command)
+        run_services(dirs, command, shell)
         time.sleep(sleep_time)
 
 
