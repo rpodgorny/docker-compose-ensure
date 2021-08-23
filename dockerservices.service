@@ -1,0 +1,9 @@
+[Unit]
+Description=Docker Services
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dockerservices --sleep 1 /home/commrat/Job/DockerComposeEnsure/active ./run
+
+[Install]
+WantedBy=multi-user.target
