@@ -12,7 +12,7 @@ Arguments:
 
 Options:
   --sleep <sleep>  Specify how often data will be send (secs).
-  --shell <shell>  Shell active.
+  --shell          Set shell arg to True.
 '''
 
 
@@ -27,7 +27,7 @@ import os
 def run_services(dirs, command, shell_):
     for dir_ in dirs:
         logging.info('Command executed: %s', command)
-        process = subprocess.run(command, capture_output=True, shell=shell_, cwd=dir_)  # TODO capture output?
+        process = subprocess.run(command, capture_output=True, shell=shell_, cwd=dir_)
         logging.info('Return code: %s', process.returncode)
 
 
