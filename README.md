@@ -2,10 +2,18 @@
 
 ## Installation
 cd to root project folder and apply this command:
-    python3 setup.py --command-packages=stdeb.command bdist_deb
+    ./makedeb.sh
 
-That will creates directory 'deb_dist' where .deb file is located.
-Install it.
+That will creates directory 'deb_dist' where .deb file is located. Install it.
+Also It will place service file to /usr/lib/systemd/system/, which will cause that user will be able to run this service:
+    systemctl start dockerservices.service
+    systemctl status dockerservices.service
+    systemctl stop dockerservices.service
+
+    systemctl enable dockerservices.service
+    systemctl disable dockerservices.service
+
+    systemctl kill dockerservices.service
 
 ## dockerservices.service
     [Unit]
@@ -17,8 +25,6 @@ Install it.
 
     [Install]
     WantedBy=multi-user.target
-
-Note: Have to find more optimal way to pass args!
 
 ## Service file
 ### Type
@@ -39,3 +45,4 @@ idle: This indicates that the service will not be run until all jobs are dispatc
 Great docs about systemd files: https://www.digitalocean.com/community/tutorials/understanding-systemd-units-and-unit-files
 Intro to systemd: https://wiki.archlinux.org/title/Systemd
 Make it works: https://www.shubhamdipt.com/blog/how-to-create-a-systemd-service-in-linux/
+Unit files: https://fedoramagazine.org/systemd-template-unit-files/
