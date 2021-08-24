@@ -39,8 +39,7 @@ def main():
     if '--' in pure_command:
         pure_command.pop(0)
     shell = args['--shell']
-    shell = True if shell else False
-    command = ' '.join(pure_command)
+    command = ' '.join(pure_command) if shell else pure_command
     sleep_time = args['--sleep']
     sleep_time = float(sleep_time) if sleep_time else 5
     dirs = [f'./{dirname}/{x}' for x in os.listdir(dirname) if os.path.islink(f'./{dirname}/{x}')]
