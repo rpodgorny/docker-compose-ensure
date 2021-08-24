@@ -21,7 +21,7 @@ Also It will place service file to /usr/lib/systemd/system/, which will cause th
 
     [Service]
     Type=simple
-    ExecStart=/usr/bin/dockerservices --sleep 1 /home/commrat/Job/DockerComposeEnsure/active ./run
+    ExecStart=/usr/bin/dockerservices --sleep 1 --shell /home/commrat/Job/DockerComposeEnsure/active ./run
 
     [Install]
     WantedBy=multi-user.target
