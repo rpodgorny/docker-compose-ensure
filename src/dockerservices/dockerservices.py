@@ -39,7 +39,6 @@ def main():
     times = []
     for i in range(len(dirs)):
           times.append(sleep_time)
-    print('times: ', times)
     while 1:
         for dir_ in dirs:
           index = dirs.index(dir_)
