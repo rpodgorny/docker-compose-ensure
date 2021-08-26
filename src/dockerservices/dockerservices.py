@@ -37,7 +37,6 @@ def main():
     sleep_time = float(sleep_time) if sleep_time else 5
     dirs = [f'./{dirname}/{x}' for x in os.listdir(dirname) if os.path.islink(f'./{dirname}/{x}')]
     times = [sleep_time for x in range(len(dirs))]
-    print(times, ' times')
     while 1:
         for dir_ in dirs:
           index = dirs.index(dir_)
