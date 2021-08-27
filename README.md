@@ -17,11 +17,11 @@ Also It will place service file to /usr/lib/systemd/system/, which will cause th
 
 ## dockerservices.service
     [Unit]
-    Description=System Logging Service
+    Description=Docker Services
 
     [Service]
     Type=simple
-    ExecStart=/usr/bin/dockerservices --sleep 1 --shell /home/commrat/Job/DockerComposeEnsure/active ./run
+    ExecStart=/usr/bin/dockerservices --check-delay 30 --shell /home/commrat/Job/DockerComposeEnsure/active ./run
 
     [Install]
     WantedBy=multi-user.target
