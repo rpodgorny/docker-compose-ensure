@@ -47,7 +47,7 @@ def main():
         for k, v in d.items():
             if t - v[0] > v[1]:
                 logging.info('Command executed: %s', command)
-                process = subprocess.run(command, capture_output=True, shell=shell_, cwd=k)
+                process = subprocess.run(command, shell=shell_, cwd=k)
                 v[0] = min(v[0] * 2, 800) if process.returncode != 0 else check_delay
                 v[1] = t
                 logging.info('Return code: %s', process.returncode)
