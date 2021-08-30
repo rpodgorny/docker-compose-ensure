@@ -34,22 +34,25 @@ def main():
     shell_ = args['--shell']
     command = ' '.join(pure_command) if shell_ else pure_command
     check_delay = float(args['--check-delay'])
-    dirs = [f'./{dirname}/{x}' for x in os.listdir(dirname) if os.path.islink(f'./{dirname}/{x}')]
-    times = [[int(check_delay), 0] for x in range(len(dirs))]
-    d = dict(zip(dirs, times))
+    d = {}
     while 1:
         check_dirs = [f'./{dirname}/{x}' for x in os.listdir(dirname) if os.path.islink(f'./{dirname}/{x}')]
         for i in check_dirs:
             if i not in d:
-                d[i] = [check_delay, 0]
+                items_creation = {i: {
+                    'interval': check_delay,
+                    't_last': 0,
+                }}
+            d.update(items_creation)
         list(filter(lambda x: d.pop(x) if x in list(d.keys()) and x not in check_dirs else None, list(d.keys())))
+
         t = time.time()
         for k, v in d.items():
-            if t - v[0] > v[1]:
+            if t - v['interval'] > v['t_last']:
                 logging.info('Command executed: %s', command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
-                v[0] = min(v[0] * 2, 800) if process.returncode != 0 else check_delay
-                v[1] = t
+                v['interval'] = min(v['interval'] * 2, 800) if process.returncode != 0 else check_delay
+                v['t_last'] = t
                 logging.info('Return code: %s', process.returncode)
             else:
                 logging.info('Not running, waiting for delay.')
