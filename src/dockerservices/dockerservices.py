@@ -23,6 +23,9 @@ import subprocess
 import logging
 import os
 
+TIME_SLEEP = 10
+INTERVAL_LIMIT = 800
+
 
 def main():
     args = docopt.docopt(__doc__)
@@ -30,8 +33,7 @@ def main():
     dirname = args['<dirname>']
     pure_command = args['<command>']
     # FIXME: fun task - rewrite the following using ternary operator ;-)
-    if '--' in pure_command:
-        pure_command.pop(0)
+    pure_command = pure_command if '--' in pure_command else pure_command.pop(0)
     shell_ = args['--shell']
     command = ' '.join(pure_command) if shell_ else pure_command
     check_delay = float(args['--check-delay'])
@@ -45,19 +47,21 @@ def main():
                     't_last': 0,
                 }}
             d.update(items_creation)  # FIXME: is this indented correctly?
-        list(filter(lambda x: d.pop(x) if x in list(d.keys()) and x not in check_dirs else None, list(d.keys())))  # FIXME: this is abusing of functional constructs - either go fully functional (reduce?) or rewrite to plain old simple for loop ;-)
+        #list(filter(lambda x: d.pop(x) if x in list(d.keys()) and x not in check_dirs else None, list(d.keys())))  # FIXME: this is abusing of functional constructs - either go fully functional (reduce?) or rewrite to plain old simple for loop ;-)
+        for i in d.keys():
+            if i in d.keys() and i not in check_dirs:
+                d.keys().pop(i)
 
         t = time.time()
         for k, v in d.items():
             if t - v['interval'] > v['t_last']:
                 logging.info('Will execute: %s', command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
-                v['interval'] = min(v['interval'] * 2, 800) if process.returncode != 0 else check_delay  # FIXME: make 800 a global constant
+                v['interval'] = min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay  # FIXME: make 800 a global constant
                 v['t_last'] = t
                 logging.info('Return code: %s', process.returncode)
-            else:
-                logging.info('Not running, waiting for delay.')  # FIXME: remove this - it generates too much noise
-        time.sleep(10)  # FIXME: make this a global constant
+            # FIXME: remove this - it generates too much noise
+        time.sleep(TIME_SLEEP)  # FIXME: make this a global constant
     return 0
 
 
