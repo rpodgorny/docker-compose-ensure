@@ -46,11 +46,11 @@ def main():
                     'interval': check_delay,
                     't_last': 0,
                 }}
-            d.update(items_creation)  # FIXME: is this indented correctly?
+            d.update(items_creation)  # FIXME: is this indented correctly? # yes we want update each 'i', don't we?
         #list(filter(lambda x: d.pop(x) if x in list(d.keys()) and x not in check_dirs else None, list(d.keys())))  # FIXME: this is abusing of functional constructs - either go fully functional (reduce?) or rewrite to plain old simple for loop ;-)
-        for i in d.keys():
-            if i in d.keys() and i not in check_dirs:
-                d.keys().pop(i)
+        for key in list(d.keys()):
+            if key in d.keys() and key not in check_dirs:
+                d.pop(key)
 
         t = time.time()
         for k, v in d.items():
