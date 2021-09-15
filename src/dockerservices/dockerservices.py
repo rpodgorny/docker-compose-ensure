@@ -33,7 +33,7 @@ def main():
     dirname = args['<dirname>']
     pure_command = args['<command>']
     # FIXME: fun task - rewrite the following using ternary operator ;-) -> nice try but incorrect - list.pop() returns the popped item, not a new list with one item popped
-    pure_command = pure_command if '--' in pure_command else pure_command.pop(0)
+    pure_command = pure_command if not '--' in pure_command else [x for x in pure_command if x != '--']  # not a big fan... but can not find out any other functional way
     shell_ = args['--shell']
     command = ' '.join(pure_command) if shell_ else pure_command
     check_delay = float(args['--check-delay'])
@@ -46,11 +46,12 @@ def main():
                     'interval': check_delay,
                     't_last': 0,
                 }}
-            d.update(items_creation)  # FIXME: items_creation may be undefined if the condition above is false
+                d.update(items_creation)  # FIXME: items_creation may be undefined if the condition above is false
 		# FIXME: better -> now try to rewrite it to dict comprehension
         for key in list(d.keys()):
             if key in d.keys() and key not in check_dirs:
                 d.pop(key)
+        # d_comp = {d.pop(n) for n in d.keys() if n not in check_dirs}
 
         t = time.time()
         for k, v in d.items():
