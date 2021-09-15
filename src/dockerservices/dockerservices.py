@@ -32,7 +32,7 @@ def main():
     logging.basicConfig(level='DEBUG')
     dirname = args['<dirname>']
     pure_command = args['<command>']
-    # FIXME: fun task - rewrite the following using ternary operator ;-)
+    # FIXME: fun task - rewrite the following using ternary operator ;-) -> nice try but incorrect - list.pop() returns the popped item, not a new list with one item popped
     pure_command = pure_command if '--' in pure_command else pure_command.pop(0)
     shell_ = args['--shell']
     command = ' '.join(pure_command) if shell_ else pure_command
@@ -46,8 +46,8 @@ def main():
                     'interval': check_delay,
                     't_last': 0,
                 }}
-            d.update(items_creation)  # FIXME: is this indented correctly? # yes we want update each 'i', don't we?
-        #list(filter(lambda x: d.pop(x) if x in list(d.keys()) and x not in check_dirs else None, list(d.keys())))  # FIXME: this is abusing of functional constructs - either go fully functional (reduce?) or rewrite to plain old simple for loop ;-)
+            d.update(items_creation)  # FIXME: items_creation may be undefined if the condition above is false
+		# FIXME: better -> now try to rewrite it to dict comprehension
         for key in list(d.keys()):
             if key in d.keys() and key not in check_dirs:
                 d.pop(key)
@@ -57,11 +57,11 @@ def main():
             if t - v['interval'] > v['t_last']:
                 logging.info('Will execute: %s', command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
-                v['interval'] = min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay  # FIXME: make 800 a global constant
+                v['interval'] = min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay
                 v['t_last'] = t
                 logging.info('Return code: %s', process.returncode)
             # FIXME: remove this - it generates too much noise
-        time.sleep(TIME_SLEEP)  # FIXME: make this a global constant
+        time.sleep(TIME_SLEEP)
     return 0
 
 
