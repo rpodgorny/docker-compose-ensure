@@ -32,7 +32,6 @@ def main():
     logging.basicConfig(level='DEBUG')
     dirname = args['<dirname>']
     pure_command = args['<command>']
-    # FIXME: fun task - rewrite the following using ternary operator ;-) -> nice try but incorrect - list.pop() returns the popped item, not a new list with one item popped
     pure_command = pure_command if pure_command[0] != '--' else pure_command[1:]
     shell_ = args['--shell']
     command = ' '.join(pure_command) if shell_ else pure_command
@@ -42,22 +41,22 @@ def main():
         check_dirs = [f'./{dirname}/{x}' for x in os.listdir(dirname) if os.path.islink(f'./{dirname}/{x}')]
         for i in check_dirs:
             if i not in d:
+				# FIXME: get rid of "items_creation" -> just use d.update with the following dict
                 items_creation = {i: {
                     'interval': check_delay,
                     't_last': 0,
                 }}
-                d.update(items_creation)  # FIXME: items_creation may be undefined if the condition above is false
-		# FIXME: better -> now try to rewrite it to dict comprehension
-        d = {key: value for key, value in d.items() if key in check_dirs}
+                d.update(items_creation)
+        d = {k: v for (k, v) in d.items() if k in check_dirs}
         t = time.time()
         for k, v in d.items():
             if t - v['interval'] > v['t_last']:
                 logging.info('Will execute: %s', command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
+				# FIXME: update the dict at once -> use "update", not two separate value assignments
                 v['interval'] = min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay
                 v['t_last'] = t
                 logging.info('Return code: %s', process.returncode)
-            # FIXME: remove this - it generates too much noise
         time.sleep(TIME_SLEEP)
     return 0
 
