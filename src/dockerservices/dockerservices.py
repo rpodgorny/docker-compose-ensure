@@ -42,11 +42,10 @@ def main():
         for i in check_dirs:
             if i not in d:
                 # FIXME: get rid of "items_creation" -> just use d.update with the following dict
-                items_creation = {i: {
+                d.update({i: {
                     'interval': check_delay,
                     't_last': 0,
-                }}
-                d.update(items_creation)
+                }})
         d = {k: v for (k, v) in d.items() if k in check_dirs}
         t = time.time()
         for k, v in d.items():
@@ -54,8 +53,10 @@ def main():
                 logging.info('Will execute: %s', command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
                 # FIXME: update the dict at once -> use "update", not two separate value assignments
-                v['interval'] = min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay
-                v['t_last'] = t
+                d.update({k: {
+                  'interval': min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
+                  't_last': t,
+                }})
                 logging.info('Return code: %s', process.returncode)
         time.sleep(TIME_SLEEP)
     return 0
