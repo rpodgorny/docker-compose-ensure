@@ -31,7 +31,8 @@ INTERVAL_LIMIT = 800
 
 def main():
     args = docopt.docopt(__doc__, version=__version__)
-    logging.basicConfig(level="DEBUG")
+    log_level = "INFO"
+    logging.basicConfig(level=log_level)
     logging.info("starting docker-compose-ensure v%s" % __version__)
     dirname = args["<dirname>"]
     pure_command = args["<command>"]
@@ -41,7 +42,7 @@ def main():
     check_delay = float(args["--check-delay"])
     d = {}
     while 1:
-        check_dirs = [f"{dirname}/{x}" for x in os.listdir(dirname) if os.path.islink(f"{dirname}/{x}")]
+        check_dirs = [x for x in os.listdir(dirname) if os.path.islink(f"{dirname}/{x}")]
         logging.debug("found dirs: %s" % check_dirs)
         for i in check_dirs:
             if i not in d:
@@ -54,7 +55,7 @@ def main():
         for k, v in d.items():
             if t - v["interval"] > v["t_last"]:
                 logging.info("will execute: %s", command)
-                process = subprocess.run(command, shell=shell_, cwd=k)
+                process = subprocess.run(command, shell=shell_, cwd=f"{dirname}/{k}")
                 d[k] = {
                     "interval": min(v["interval"] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
                     "t_last": t,
