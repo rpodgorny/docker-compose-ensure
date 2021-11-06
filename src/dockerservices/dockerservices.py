@@ -54,8 +54,8 @@ def main():
                 process = subprocess.run(command, shell=shell_, cwd=k)
                 # FIXME: update the dict at once -> use "update", not two separate value assignments
                 d.update({k: {
-                  'interval': min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
-                  't_last': t,
+                    'interval': min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
+                    't_last': t,
                 }})
                 logging.info('Return code: %s', process.returncode)
         time.sleep(TIME_SLEEP)
