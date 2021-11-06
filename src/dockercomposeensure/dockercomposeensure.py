@@ -43,22 +43,20 @@ def main():
         check_dirs = [f"./{dirname}/{x}" for x in os.listdir(dirname) if os.path.islink(f"./{dirname}/{x}")]
         for i in check_dirs:
             if i not in d:
-                # FIXME: get rid of "items_creation" -> just use d.update with the following dict
-                d.update({i: {
+                d[i] = {
                     "interval": check_delay,
                     "t_last": 0,
-                }})
+                }
         d = {k: v for (k, v) in d.items() if k in check_dirs}
         t = time.time()
         for k, v in d.items():
             if t - v["interval"] > v["t_last"]:
                 logging.info("Will execute: %s", command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
-                # FIXME: update the dict at once -> use "update", not two separate value assignments
-                d.update({k: {
+                d[k] = {
                     "interval": min(v["interval"] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
                     "t_last": t,
-                }})
+                }
                 logging.info("Return code: %s", process.returncode)
         time.sleep(TIME_SLEEP)
     return 0
