@@ -1,17 +1,18 @@
 #!/usr/bin/python3
 
 from setuptools import setup
+from version import __version__
 
 setup(
-    name='dockerservices',
-    version='2.2.2',
-    description='Start docker services',
-    long_description='Start docker services ....',
-    packages=['dockerservices'],
-    install_requires=['docopt'],
-    package_dir={'':'src'},
-    entry_points={"console_scripts": ["dockerservices = dockerservices.dockerservices:main"]},
+    name="docker-compose-ensure",
+    version=__version__,
+    description="Make sure my docker-compose services are running",
+    long_description="Make sure my docker-compose services are running",
+    packages=["dockercomposeensure"],
+    install_requires=["docopt"],
+    package_dir={"": "src"},
+    entry_points={"console_scripts": ["docker-compose-ensure = dockercomposeensure.dockercomposeensure:main"]},
     include_package_data=True,
-    data_files=[("/usr/lib/systemd/system/", ["dockerservices.service"])],
-    package_data={"": ["dockerservices.service"]},
+    data_files=[("/usr/lib/systemd/system/", ["docker-compose-ensure.service"])],
+    package_data={"": ["docker-compose-ensure.service"]},
 )

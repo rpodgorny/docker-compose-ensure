@@ -13,9 +13,10 @@ Arguments:
 Options:
   --check-delay=<n>  Specify interval how often process will be checked (secs).
   --shell            Set shell arg to True.
-'''
+"""
 
 
+from version import __version__
 import docopt
 import sys
 import time
