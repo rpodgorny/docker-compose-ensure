@@ -32,6 +32,7 @@ INTERVAL_LIMIT = 800
 def main():
     args = docopt.docopt(__doc__, version=__version__)
     logging.basicConfig(level="DEBUG")
+    logging.info("starting docker-compose-ensure v%s" % __version__)
     dirname = args["<dirname>"]
     pure_command = args["<command>"]
     pure_command = pure_command if pure_command[0] != "--" else pure_command[1:]
