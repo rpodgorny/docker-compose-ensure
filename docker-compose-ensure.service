@@ -1,5 +1,6 @@
 [Unit]
 Description=docker-compose-ensure
+After=docker.service
 
 [Service]
 Type=simple
