@@ -1,18 +1,18 @@
 #!/usr/bin/python3
 
 """
-Docker Services
+docker-compose-ensure
 
 Usage:
-  services.py [options] <dirname> <command>...
+  docker-compose-ensure [options] <dirname> <command>...
 
 Arguments:
-  <dirname>  Name of the directory with services.
+  <dirname>  Name of the directory with symlinks to services.
   <command>  Command that will be executed.
 
 Options:
-  --check-delay=<n>  Specify interval how often process will be checked (secs).
-  --shell            Set shell arg to True.
+  --interval=<n>  How often process will be checked (secs).
+  --shell         Set shell arg to True for subprocess.
 """
 
 
@@ -26,7 +26,7 @@ import os
 
 
 SLEEP = 10
-INTERVAL_LIMIT = 800
+INTERVAL_LIMIT = 600
 
 
 def main():
