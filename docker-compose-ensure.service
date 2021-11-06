@@ -1,0 +1,9 @@
+[Unit]
+Description=Docker Services
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dockerservices --check-delay 30 --shell /etc/docker-compose-ensure docker-compose up -d
+
+[Install]
+WantedBy=multi-user.target
