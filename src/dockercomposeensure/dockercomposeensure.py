@@ -54,13 +54,13 @@ def main():
         t = time.time()
         for k, v in d.items():
             if t - v["interval"] > v["t_last"]:
-                logging.info("will execute: %s", command)
-                process = subprocess.run(command, shell=shell_, cwd=f"{dirname}/{k}")
+                logging.info("%s -> %s", (k, command))
+                p = subprocess.run(command, shell=shell_, cwd=f"{dirname}/{k}")
                 d[k] = {
-                    "interval": min(v["interval"] * 2, INTERVAL_LIMIT) if process.returncode != 0 else interval,
+                    "interval": min(v["interval"] * 2, INTERVAL_LIMIT) if p.returncode != 0 else interval,
                     "t_last": t,
                 }
-                logging.info("return code: %s", process.returncode)
+                logging.info("%s: res=%s", (k, p.returncode))
         logging.debug("sleep %s" % SLEEP)
         time.sleep(SLEEP)
     return 0
