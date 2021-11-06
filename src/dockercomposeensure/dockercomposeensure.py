@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-'''
+"""
 Docker Services
 
 Usage:
@@ -23,41 +23,42 @@ import subprocess
 import logging
 import os
 
+
 TIME_SLEEP = 10
 INTERVAL_LIMIT = 800
 
 
 def main():
-    args = docopt.docopt(__doc__)
-    logging.basicConfig(level='DEBUG')
-    dirname = args['<dirname>']
-    pure_command = args['<command>']
-    pure_command = pure_command if pure_command[0] != '--' else pure_command[1:]
-    shell_ = args['--shell']
-    command = ' '.join(pure_command) if shell_ else pure_command
-    check_delay = float(args['--check-delay'])
+    args = docopt.docopt(__doc__, version=__version__)
+    logging.basicConfig(level="DEBUG")
+    dirname = args["<dirname>"]
+    pure_command = args["<command>"]
+    pure_command = pure_command if pure_command[0] != "--" else pure_command[1:]
+    shell_ = args["--shell"]
+    command = " ".join(pure_command) if shell_ else pure_command
+    check_delay = float(args["--check-delay"])
     d = {}
     while 1:
-        check_dirs = [f'./{dirname}/{x}' for x in os.listdir(dirname) if os.path.islink(f'./{dirname}/{x}')]
+        check_dirs = [f"./{dirname}/{x}" for x in os.listdir(dirname) if os.path.islink(f"./{dirname}/{x}")]
         for i in check_dirs:
             if i not in d:
                 # FIXME: get rid of "items_creation" -> just use d.update with the following dict
                 d.update({i: {
-                    'interval': check_delay,
-                    't_last': 0,
+                    "interval": check_delay,
+                    "t_last": 0,
                 }})
         d = {k: v for (k, v) in d.items() if k in check_dirs}
         t = time.time()
         for k, v in d.items():
-            if t - v['interval'] > v['t_last']:
+            if t - v["interval"] > v["t_last"]:
                 logging.info('Will execute: %s', command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
                 # FIXME: update the dict at once -> use "update", not two separate value assignments
                 d.update({k: {
-                    'interval': min(v['interval'] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
-                    't_last': t,
+                    "interval": min(v["interval"] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
+                    "t_last": t,
                 }})
-                logging.info('Return code: %s', process.returncode)
+                logging.info("Return code: %s", process.returncode)
         time.sleep(TIME_SLEEP)
     return 0
 
