@@ -16,7 +16,7 @@ Options:
 """
 
 
-from version import __version__
+from .version import __version__
 import docopt
 import sys
 import time
