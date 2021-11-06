@@ -52,7 +52,7 @@ def main():
         t = time.time()
         for k, v in d.items():
             if t - v["interval"] > v["t_last"]:
-                logging.info('Will execute: %s', command)
+                logging.info("Will execute: %s", command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
                 # FIXME: update the dict at once -> use "update", not two separate value assignments
                 d.update({k: {
