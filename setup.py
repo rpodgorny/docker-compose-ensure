@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from setuptools import setup
-from version import __version__
+from dockercomposeensure.version import __version__
 
 setup(
     name="docker-compose-ensure",
