@@ -41,7 +41,7 @@ def main():
     check_delay = float(args["--check-delay"])
     d = {}
     while 1:
-        check_dirs = [f"./{dirname}/{x}" for x in os.listdir(dirname) if os.path.islink(f"./{dirname}/{x}")]
+        check_dirs = [f"{dirname}/{x}" for x in os.listdir(dirname) if os.path.islink(f"{dirname}/{x}")]
         logging.debug("found dirs: %s" % check_dirs)
         for i in check_dirs:
             if i not in d:
