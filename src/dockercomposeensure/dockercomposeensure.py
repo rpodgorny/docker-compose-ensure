@@ -25,7 +25,7 @@ import logging
 import os
 
 
-TIME_SLEEP = 10
+SLEEP = 10
 INTERVAL_LIMIT = 800
 
 
@@ -41,6 +41,7 @@ def main():
     d = {}
     while 1:
         check_dirs = [f"./{dirname}/{x}" for x in os.listdir(dirname) if os.path.islink(f"./{dirname}/{x}")]
+        logging.debug("found dirs: %s" % check_dirs)
         for i in check_dirs:
             if i not in d:
                 d[i] = {
@@ -51,14 +52,15 @@ def main():
         t = time.time()
         for k, v in d.items():
             if t - v["interval"] > v["t_last"]:
-                logging.info("Will execute: %s", command)
+                logging.info("will execute: %s", command)
                 process = subprocess.run(command, shell=shell_, cwd=k)
                 d[k] = {
                     "interval": min(v["interval"] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
                     "t_last": t,
                 }
-                logging.info("Return code: %s", process.returncode)
-        time.sleep(TIME_SLEEP)
+                logging.info("return code: %s", process.returncode)
+        logging.debug("sleep %s" % SLEEP)
+        time.sleep(SLEEP)
     return 0
 
 
