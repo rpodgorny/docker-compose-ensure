@@ -39,7 +39,7 @@ def main():
     pure_command = pure_command if pure_command[0] != "--" else pure_command[1:]
     shell_ = args["--shell"]
     command = " ".join(pure_command) if shell_ else pure_command
-    check_delay = float(args["--check-delay"])
+    interval = float(args["--interval"]) if args["--interval"] else 60
     d = {}
     while 1:
         check_dirs = [x for x in os.listdir(dirname) if os.path.islink(f"{dirname}/{x}")]
@@ -47,7 +47,7 @@ def main():
         for i in check_dirs:
             if i not in d:
                 d[i] = {
-                    "interval": check_delay,
+                    "interval": interval,
                     "t_last": 0,
                 }
         d = {k: v for (k, v) in d.items() if k in check_dirs}
@@ -57,7 +57,7 @@ def main():
                 logging.info("will execute: %s", command)
                 process = subprocess.run(command, shell=shell_, cwd=f"{dirname}/{k}")
                 d[k] = {
-                    "interval": min(v["interval"] * 2, INTERVAL_LIMIT) if process.returncode != 0 else check_delay,
+                    "interval": min(v["interval"] * 2, INTERVAL_LIMIT) if process.returncode != 0 else interval,
                     "t_last": t,
                 }
                 logging.info("return code: %s", process.returncode)

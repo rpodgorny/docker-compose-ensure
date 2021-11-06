@@ -3,7 +3,7 @@ Description=docker-compose-ensure
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/docker-compose-ensure --check-delay 30 --shell /etc/docker-compose-ensure docker-compose up -d
+ExecStart=/usr/bin/docker-compose-ensure --shell /etc/docker-compose-ensure -- docker-compose up -d
 
 [Install]
 WantedBy=multi-user.target
