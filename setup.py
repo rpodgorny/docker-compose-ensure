@@ -4,7 +4,7 @@ from setuptools import setup
 from src.dockercomposeensure.version import __version__
 
 setup(
-    name="docker-compose-ensure",
+    name="dockercomposeensure",
     version=__version__,
     description="Make sure my docker-compose services are running",
     long_description="Make sure my docker-compose services are running",
